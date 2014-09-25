@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="39" height="29" tilewidth="21" tileheight="21">
+ <tileset firstgid="1" name="spritesheetV2" tilewidth="21" tileheight="21" spacing="2" margin="2">
+  <image source="../../../../../../Downloads/Platformer Art Pixel Redux/spritesheetV2.png" trans="ff00ff" width="692" height="692"/>
+ </tileset>
+ <layer name="background" width="39" height="29" opacity="0.9">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjALaAD5m7HigAS53DbT7CLlroN23mYmBYQsOvJVp4NyFz217BoHbLgLtv4QDXx4k4bZnCMXpqNvwg6GQ3tDz6GAIt8Ecp5tx5NHB4LahkN4GS/lWjmTnYEpv9UD7GoC4kWnwuW0u0L55QDwfau9gS29VeOJ0zwCGGwhUAO3Mh7YZ3wPZH3DgjwOcTwcD8GUcvBgAlxZ5Qg==
+  </data>
+ </layer>
+ <layer name="ground" width="39" height="29">
+  <data encoding="base64" compression="zlib">
+   eJzt0rERABAQRNE7DVGg4gUSgZRh5r1kt4AfAQCc1sv+wwl64ya9cZPe/lMzouXc9b+wLxuxcQtU
+  </data>
+ </layer>
+</map>

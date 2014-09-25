@@ -1,0 +1,208 @@
+<!doctype html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8" />
+    <title>Feed The Sumo</title>
+    <!--<script src="js/phaser.min.js"></script>-->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/phaser/2.1.0/phaser.min.js"></script>
+    <script type="text/javascript" src="js/Player.js"></script>
+    <script type="text/javascript" src="js/Level1.js"></script>
+    <script type="text/javascript" src="js/HUD.js"></script>
+    <style>
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+
+// Skapar ett phaser game
+var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+// karaktärer
+var sumos;
+var enemy;
+// Mat
+var foodItems;
+// Audio
+var sound;
+// bool
+var dropped;
+
+
+function preload () {
+    // Laddar objekts bilder
+    // laddar in spelare
+    player = new Player(game);
+    player.preload();
+
+    // LEVEL
+    level1 = new Level1(game);
+    level1.preload();
+
+    // HUD
+    hud = new HUD(game);
+
+    game.load.image('sumoGreen', 'assets/lonleySumo.png');
+    game.load.image('food', 'assets/star.png');
+    game.load.spritesheet('baddie', 'assets/baddie.png', 32, 32);
+
+    // Laddar ljud
+    game.load.audio('dmg', 'assets/sound/TakeDamage7.wav');
+}
+
+function create () {
+    // Level create
+    level1.create();
+
+    // Time TODO
+    game.time.advancedTiming = true;
+    //startTime = new Phaser.Timer(game);
+    //startTime.start();
+    //console.log(startTime);
+
+    // Använder arcade physics
+    game.physics.startSystem(Phaser.Physics.ARCADE);
+
+    //
+    // Skapa sumo(s)
+    //
+    sumos = game.add.group();
+    sumos.enableBody = true;
+    createSumo(sumos);
+
+    //
+    // Skapa enemy
+    //
+    createEnemy();
+    
+    //
+    // Skapar spelare
+    //
+    player.create();
+    
+    //
+    // Skapa mat
+    //
+    foodItems = game.add.group();
+    foodItems.enableBody = true;
+    //game.physics.enable(foodItems, Phaser.Physics.ARCADE);
+    createFoodItem(foodItems, 200, 110, false);
+
+    //
+    // HUD
+    //
+    hud.create();
+
+    //
+    // Sound
+    //
+    sound = game.add.audio('dmg'); 
+
+
+    // Enemy
+    moveEnemy(enemy, 1, 1);
+}
+
+function update () {
+    // Update spelare
+    player.update();
+
+    // Kollision mellan objekt
+    game.physics.arcade.collide(foodItems, level1.layerGround);
+    game.physics.arcade.collide(sumos, level1.layerGround);
+    game.physics.arcade.collide(enemy, level1.layerGround);
+
+    //game.physics.arcade.collide(player.sprite, level1.layerGround);
+
+    // Mata sumo
+    game.physics.arcade.overlap(player.sprite, sumos, feedTheSumo, null, this);
+
+    // tappa maten vid krock med fiende
+    game.physics.arcade.overlap(player.sprite, enemy, droppFood, null, this);
+
+
+
+    // Time
+    hud.update();
+    //gameTimeDisplay();
+}
+
+// 
+// ======================Functions======================
+//
+function createSumo(sumos)
+{
+    var sumo = sumos.create(400, game.world.height - 145, 'sumoGreen');
+    game.physics.enable(sumo, Phaser.Physics.ARCADE);
+    sumo.body.gravity.y = 800;
+}
+
+function createEnemy()
+{
+    enemy = game.add.sprite(300, game.world.height - 130, 'baddie');
+    game.physics.enable(enemy, Phaser.Physics.ARCADE);
+    enemy.enableBody = false;
+    enemy.body.gravity.y = 800;
+}
+
+function createFoodItem(foodItems, x, y, bool)
+{
+    var food = foodItems.create(x, game.world.height - y, 'food');
+    game.physics.enable(food, Phaser.Physics.ARCADE);
+
+    if(bool) 
+    {
+        food.body.bounce.y = 0.3;
+        food.body.gravity.y = 800;
+        food.body.velocity.y = -180
+    }
+}
+
+function feedTheSumo()
+{
+    if(player.hasFoodItem)
+    {
+        hud.score += 5;
+        hud.scoreText.text = 'Weight Gain: ' + hud.score + 'kg';
+        player.hasFoodItem = false;
+        console.log('feed sumo, hasFoodItem = ' + player.hasFoodItem);
+        // TODO
+        starvingSumo();
+        //console.log(startTime);
+    }
+}
+
+function starvingSumo()
+{
+ //console.log('time elapsed:' + game.time.time);
+}
+
+function droppFood()
+{
+    if(player.hasFoodItem)
+    {
+        player.hasFoodItem = false;
+        console.log('Droped the food, , hasFoodItem =' + player.hasFoodItem);
+        createFoodItem(foodItems, 350, 125, true);
+        sound.play('');
+    }
+}
+
+function moveEnemy(enemy, x1, x2)
+{
+    /*var tween = game.add.tween(enemy).to({ x: 400}, 6000, Phaser.Easing.Linear.None).to({ x: 300}, 6000, Phaser.Easing.Linear.None).loop().start();*/
+    //if(enemy.body.x > x1)
+    var tween = game.add.tween(enemy)
+    .to({x:400}, 1000, Phaser.Easing.Linear.None, false, 0, Number.MAX_VALUE,true)
+    .loop()
+    .start();
+    //tween.onComplete.add(moveEnemy, this);
+    //tween.start();
+}
+
+</script>
+
+</body>
+</html>
