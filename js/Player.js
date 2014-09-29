@@ -5,6 +5,7 @@ Player = function(game) {
     this.cursors = null;
     this.jumpButton = null;
     this.hasFoodItem = false;
+    this.sound = null;
 
 };
 
@@ -36,6 +37,8 @@ Player.prototype = {
 
         this.cursors = this.game.input.keyboard.createCursorKeys();
         this.jumpButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+
+        this.sound = game.add.audio('dmg'); 
     },
 
     collectFood: function(player, food) {
@@ -43,8 +46,17 @@ Player.prototype = {
         this.hasFoodItem = true;
         console.log('Collected food, , hasFoodItem =' + this.hasFoodItem);
 
-
         this.game.add.tween(level1.imageFinish).to( { alpha: 1 }, 2000, Phaser.Easing.Linear.None).start();
+    },
+
+    dropFood: function() {
+    if(this.hasFoodItem)
+        {
+            this.hasFoodItem = false;
+            console.log('Droped the food, , hasFoodItem =' + level1.enemy.x);
+            level1.createFoodItem( this.sprite.x, this.sprite.y - 40, true);
+            this.sound.play('');
+        }
     },
 
     update: function() {
@@ -58,7 +70,8 @@ Player.prototype = {
         this.game.physics.arcade.collide(this.sprite, level1.layerGround);
         //this.game.physics.arcade.collide(this.sprite, level1.layerGround, function(){console.log('hej')});
 
-        this.game.physics.arcade.overlap(player.sprite, foodItems, this.collectFood, null, this);
+        this.game.physics.arcade.overlap(this.sprite, level1.foodItems, this.collectFood, null, this);
+        this.game.physics.arcade.overlap(this.sprite, level1.enemy, this.dropFood, null, this);
 
         // Vänster / höger
         if (this.cursors.left.isDown)
