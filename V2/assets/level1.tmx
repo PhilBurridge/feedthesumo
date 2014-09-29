@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="39" height="29" tilewidth="21" tileheight="21">
+ <tileset firstgid="1" name="spritesheetTransp" tilewidth="21" tileheight="21" spacing="2" margin="2">
+  <image source="../../../../../../Downloads/Platformer Art Pixel Redux/spritesheetTransp.png" trans="ff00ff" width="692" height="692"/>
+ </tileset>
+ <layer name="ground" width="39" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T20ND6AAAAAAeDERrAAB
+  </data>
+ </layer>
+ <layer name="Tile Layer 2" width="39" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T20ND6AAAAAAeDERrAAB
+  </data>
+ </layer>
+</map>
