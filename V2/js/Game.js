@@ -28,6 +28,79 @@ Game = function(game) {
 
 Game.prototype = {      
     create: function() {
+        
+
+        //
+        // From LEVEL
+        //
+        game.stage.backgroundColor = '#ADD8E6';
+        this.imageFinish = game.add.sprite(game.world.centerX, game.world.centerY, 'finish');
+        this.imageFinish.anchor.setTo(0.5, 0.5);
+        this.imageFinish.alpha = 0;
+
+        // Skapar tilemappen
+        this.map = this.game.add.tilemap('test2');
+        this.map.addTilesetImage('spritesheetV2', 'tiles2');
+
+        this.map = this.game.add.tilemap('test2');
+        this.map.addTilesetImage('spritesheetV2', 'tiles2');
+
+        //this.layerGround.setCollisionByExclusion([]);
+
+        
+        this.layerBackground = this.map.createLayer('background');
+        this.layerGround = this.map.createLayer('ground');
+        this.layerDoor = this.map.createLayer('door');
+        this.map.setCollision(636, true, 'ground');
+        this.map.setCollision(303, true, 'ground');
+        this.map.setCollision(304, true, 'ground');
+        this.map.setCollision(782, true, 'ground');
+        this.map.setCollision(736, true, 'ground');
+        this.map.setCollision(737, true, 'ground');
+        this.map.setCollision(738, true, 'ground');
+        this.map.setCollision(785, true, 'ground');
+        this.map.setCollision(815, true, 'ground');
+
+        //this.layerDoor = this.map.createLayer('door');
+
+        this.layerGround.resizeWorld();
+        this.layerBackground.resizeWorld();
+        this.layerDoor.resizeWorld();
+
+        // Kunna hoppa igenom lager id: 635, 665
+        this.map.forEach(function (tile) {
+            if (tile.index === 636 || tile.index === 782 || tile.index === 736 || tile.index === 737 || tile.index === 738 || tile.index === 785 || tile.index === 815 ) { 
+                //console.log(tile);
+                tile.collideDown = false;
+                tile.collideLeft = false;
+                tile.collideRight = false;
+            } 
+        }, this, 0, 0, this.map.width, this.map.height, this.layerGround);
+
+        //
+        // SUMO
+        //
+        this.sumo = this.game.add.sprite(400, this.game.world.height - 145, 'sumoGreen');
+        this.game.physics.enable(this.sumo, Phaser.Physics.ARCADE);
+        this.sumo.body.gravity.y = 800;
+        this.sumo.enableBody = true;
+
+        //
+        // Food
+        //
+        this.foodItems = this.game.add.group();
+        this.foodItems.enableBody = true;
+        //game.physics.enable(foodItems, Phaser.Physics.ARCADE);
+        //createFoodItem(foodItems, 200, 110, false);
+
+        //
+        // HUD
+        //
+        this.scoreText = this.game.add.text(16, 16, 'Weight Gain: 0kg', { fontSize: '32px', fill: '#00FF00' });
+        this.gameTimeText = this.game.add.text(300, 16, 'Time: 0', { fontSize: '32px', fill: '#00FF00' });
+
+
+        this.createLevel(this.levelNumber);
         //
         // From player
         //
@@ -52,60 +125,6 @@ Game.prototype = {
         this.jumpButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
         this.sound = game.add.audio('dmg');
-
-        //
-        // From LEVEL
-        //
-        game.stage.backgroundColor = '#ADD8E6';
-        this.imageFinish = game.add.sprite(game.world.centerX, game.world.centerY, 'finish');
-        this.imageFinish.anchor.setTo(0.5, 0.5);
-        this.imageFinish.alpha = 0;
-
-        // Skapar tilemappen
-        this.map = this.game.add.tilemap('test2');
-        this.map.addTilesetImage('spritesheetV2', 'tiles2');
-
-        this.map.setCollisionByExclusion([]);
-        this.layerGround = this.map.createLayer('ground');
-        this.layerGround.resizeWorld();
-
-        // Kunna hoppa igenom lager id: 635, 665
-        this.map.forEach(function (tile) {
-            if (tile.index === 636) { 
-                //console.log(tile);
-                tile.collideDown = false;
-            } 
-        }, this, 0, 0, this.map.width, this.map.height, this.layerGround);
-
-        //
-        // SUMO
-        //
-        this.sumo = this.game.add.sprite(400, this.game.world.height - 145, 'sumoGreen');
-        this.game.physics.enable(this.sumo, Phaser.Physics.ARCADE);
-        this.sumo.body.gravity.y = 800;
-        this.sumo.enableBody = true;
-
-        
-
-        
-
-        //
-        // Food
-        //
-        this.foodItems = this.game.add.group();
-        this.foodItems.enableBody = true;
-        //game.physics.enable(foodItems, Phaser.Physics.ARCADE);
-        //createFoodItem(foodItems, 200, 110, false);
-
-
-
-        //
-        // HUD
-        //
-        this.scoreText = this.game.add.text(16, 16, 'Weight Gain: 0kg', { fontSize: '32px', fill: '#00FF00' });
-        this.gameTimeText = this.game.add.text(300, 16, 'Time: 0', { fontSize: '32px', fill: '#00FF00' });
-
-       this.createLevel(this.levelNumber);
     }, 
 
     createLevel: function(lvl) {
@@ -118,7 +137,8 @@ Game.prototype = {
                 case 2: {
                         this.food = this.foodItems.create(220, this.game.world.height - 130, 'food');
                         break;
-                } case 3: {
+                } 
+                case 3: {
                         this.food = this.foodItems.create(220, this.game.world.height - 130, 'food');
                         this.game.physics.enable(this.food, Phaser.Physics.ARCADE);
                         //

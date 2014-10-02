@@ -12,7 +12,7 @@ Preloader.prototype = {
         //
         // MAP
         //
-        this.game.load.tilemap('test2', './assets/level1v03.json', null, Phaser.Tilemap.TILED_JSON);
+        this.game.load.tilemap('test2', './assets/level1v04.json', null, Phaser.Tilemap.TILED_JSON);
         this.game.load.image('tiles2', './assets/spritesheetV2.png');
         this.game.load.image('finish', 'assets/text.png');
 
