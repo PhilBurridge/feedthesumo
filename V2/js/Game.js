@@ -23,6 +23,8 @@ Game = function(game) {
     this.gameTimeText = null;
     // LEVEL
     this.levelNumber = 1;
+    this.sumoScale = 0.6;
+    this.talkBubble = null;
 
 };
 
@@ -82,6 +84,8 @@ Game.prototype = {
         //
         this.sumo = this.game.add.sprite(400, this.game.world.height - 145, 'sumoGreen');
         this.game.physics.enable(this.sumo, Phaser.Physics.ARCADE);
+        this.sumo.scale.x = this.sumoScale;
+        this.sumo.scale.y = this.sumoScale;
         this.sumo.body.gravity.y = 800;
         this.sumo.enableBody = true;
 
@@ -110,7 +114,7 @@ Game.prototype = {
 
         // Spelarens egenskaper
         this.sprite.body.bounce.y = 0.1;
-        this.sprite.body.gravity.y = 800;
+        this.sprite.body.gravity.y = 900;
         this.sprite.body.collideWorldBounds = true;
         this.sprite.body.setSize(20, 32, 5, 16);
         // TODO
@@ -130,17 +134,29 @@ Game.prototype = {
     createLevel: function(lvl) {
         switch(lvl) {
                 case 1: {
-                        this.food = this.foodItems.create(200, this.game.world.height - 80, 'food');
-                        this.game.physics.enable(this.food, Phaser.Physics.ARCADE);
+                        // IM HUNGRY Bubble
+                        this.talkBubble = this.game.add.sprite(this.sumo.x + 26, this.sumo.y + 25, 'hungryBubble');
+                        this.game.time.events.add(Phaser.Timer.SECOND * 4, function() {this.game.add.tween(this.talkBubble).to( { alpha: 0 }, 2000, Phaser.Easing.Linear.None, true);}, this);
+                        // Create food
+                        this.food = this.foodItems.create(200, this.game.world.height - 80, 'meatStick');
+                        this.food.scale.x = 0.6;
+                        this.food.scale.y = 0.6;
+                        this.food.body.gravity.y = 800;
+                        //this.game.physics.enable(this.food, Phaser.Physics.ARCADE);
                     break;
                 }
                 case 2: {
-                        this.food = this.foodItems.create(220, this.game.world.height - 130, 'food');
+                        this.food = this.foodItems.create(220, this.game.world.height - 130, 'cake');
+                        this.food.scale.x = 0.6;
+                        this.food.scale.y = 0.6;
+                        this.food.body.gravity.y = 800;
                         break;
                 } 
                 case 3: {
-                        this.food = this.foodItems.create(220, this.game.world.height - 130, 'food');
-                        this.game.physics.enable(this.food, Phaser.Physics.ARCADE);
+                        this.food = this.foodItems.create(220, this.game.world.height - 80, 'meatStick');
+                        this.food.scale.x = 0.6;
+                        this.food.scale.y = 0.6;
+                        this.food.body.gravity.y = 800;
                         //
                         // Enemy
                         //
@@ -181,8 +197,30 @@ Game.prototype = {
             console.log('feed sumo, hasFoodItem = ' + this.hasFoodItem);
             this.levelNumber++;
             this.game.add.tween(this.imageFinish).to( { alpha: 1 }, 2000, Phaser.Easing.Linear.None).start();
-            this.game.time.events.add(Phaser.Timer.SECOND * 4, function() {this.game.state.start('game');}, this);
+            this.sumoScale += 0.2;
 
+            // Ta bort prat bubblan om matad
+            this.talkBubble.alpha = 0;
+
+            // Gör sumon större
+            var tween = this.game.add.tween(this.sumo.scale)
+            .to({x:this.sumoScale - 0.2,y:this.sumoScale - 0.2}, 500, Phaser.Easing.Back.Out)
+            .to({x:this.sumoScale - 0.1,y:this.sumoScale - 0.1}, 500, Phaser.Easing.Back.Out)
+            .to({x:this.sumoScale,y:this.sumoScale}, 500, Phaser.Easing.Back.Out)
+            .start();
+
+            // Sumo blinkar
+            var tween = this.game.add.tween(this.sumo)
+            .to({alpha:0.5}, 250, Phaser.Easing.Back.Out)
+            .to({alpha:1}, 250, Phaser.Easing.Back.Out)
+            .to({alpha:0.5}, 250, Phaser.Easing.Back.Out)
+            .to({alpha:1}, 250, Phaser.Easing.Back.Out)
+            .to({alpha:0.5}, 250, Phaser.Easing.Back.Out)
+            .to({alpha:1}, 250, Phaser.Easing.Back.Out)
+            .start();
+
+            // End screen
+            this.game.time.events.add(Phaser.Timer.SECOND * 4, function() {this.game.state.start('game');}, this);
             // TODO
             //starvingSumo();
             //console.log(startTime);
@@ -244,7 +282,7 @@ Game.prototype = {
         // Hoppa
         if (this.jumpButton.isDown && this.sprite.body.blocked.down)
         {
-            this.sprite.body.velocity.y = -500;
+            this.sprite.body.velocity.y = -400;
         }
 
         // HUD

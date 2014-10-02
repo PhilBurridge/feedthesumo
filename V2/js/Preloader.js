@@ -21,6 +21,9 @@ Preloader.prototype = {
         //
         this.game.load.image('sumoGreen', 'assets/lonleySumo.png');    
         this.game.load.image('food', 'assets/star.png');
+        this.game.load.image('meatStick', 'assets/meat_bone.png');
+        this.game.load.image('cake', 'assets/cake.png');
+        this.game.load.image('hungryBubble', 'assets/talk_bubble.png');
         this.game.load.spritesheet('baddie', 'assets/baddie.png', 32, 32);
         // Player
         this.game.load.spritesheet('player', 'assets/dude.png', 32, 48);
