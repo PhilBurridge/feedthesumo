@@ -5,10 +5,12 @@
     <title>Feed The Sumo</title>
     <!--<script src="js/phaser.min.js"></script>-->
     <script src="//cdnjs.cloudflare.com/ajax/libs/phaser/2.1.0/phaser.min.js"></script>
-    <script src="js/Player.js"></script>
-    <script src="js/Level1.js"></script>
-    <script src="js/HUD.js"></script>
-    <script src="js/Mainmenu.js"></script>
+    <link rel="stylesheet" href="style.css"></link>
+    <script src="js/Preloader.js"></script>
+    <script src="js/MainMenu.js"></script>
+    <script src="js/Game.js"></script>
+    <script src="js/Levels.js"></script>
+    
     <style>
         body {
             margin: 0;
@@ -16,97 +18,15 @@
     </style>
 </head>
 <body>
-
 <script>
-
-// Skapar ett phaser game
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
-game.state.add('startMenu', Mainmenu);
-game.state.add('playerPreloader', Player.preload);
-game.state.add('player', Player);
-game.state.add('level1', Level1);
-game.state.add('hud', HUD);
-//game.state.add('level2', Level2);
-
-game.state.start('startMenu');
-
-
-function preload () {
-
-    //
-    // PLAYER
-    //
-    // Laddar objekts bilder
-    // laddar in spelare
-    player = new Player(game);
-    player.preload();
-    //
-    // LEVEL
-    //
-    level1 = new Level1(game);
-    level1.preload();
-    //
-    // HUD
-    //
-    hud = new HUD(game);
-
-    // Laddar ljud
-    game.load.audio('dmg', 'assets/sound/TakeDamage7.wav');
-}
-
-function create () {
-    // Level create
-    level1.create();
-
-    // Time TODO
-    game.time.advancedTiming = true;
-    //startTime = new Phaser.Timer(game);
-    //startTime.start();
-    //console.log(startTime);
-
-    // Använder arcade physics
-    game.physics.startSystem(Phaser.Physics.ARCADE);
-    
-    //
-    // Skapar spelare
-    //
-    player.create();
-
-    //
-    // HUD
-    //
-    hud.create();
-
-}
-
-function update () {
-    // Update spelare
-    level1.update();
-    player.update();
-    hud.update();
-
-    // Kollision mellan objekt
-    //game.physics.arcade.collide(level1.foodItems, level1.layerGround);
-    //game.physics.arcade.collide(level1.sumo, level1.layerGround);
-    //game.physics.arcade.collide(level1.enemy, level1.layerGround);
-    //game.physics.arcade.collide(player.sprite, level1.layerGround);
-
-    // Time
-
-    //gameTimeDisplay();
-}
-
-// 
-// ======================Functions======================
-//
-function starvingSumo()
-{
- //console.log('time elapsed:' + game.time.time);
-}
-
-
+    var game = new Phaser.Game(800, 600, Phaser.AUTO, 'gameCentered');
+    game.state.add('preloader', Preloader);
+    game.state.add('mainmenu', MainMenu);
+    game.state.add('game', Game);
+    game.state.add('levels', Levels);
+    game.state.start('preloader');
 
 </script>
-
+<div id='gameCentered'></div>
 </body>
 </html>

@@ -1,55 +1,50 @@
-Mainmenu = function(game) {
+MainMenu = function(game) {
 
     this.game = game;
     this.map = null;
     this.layerGround = null;
     this.layerBackground = null;
+    this.layerDoor = null;
     this.button = null;
+    this.level = null;
 
 }
 
-Mainmenu.prototype = {
-
-    preload: function() {
-        this.game.load.tilemap('test', './assets/test21by21.json', null, Phaser.Tilemap.TILED_JSON);
-        this.game.load.image('tiles', './assets/spritesheet.png');
-        this.game.load.image('menu', './assets/startscreen.png');
-        this.game.load.image('button', './assets/button.png');
-
-
-    },
+MainMenu.prototype = {
 
     create: function() {
-        game.stage.backgroundColor = '#ADD8E6';
+        //game.stage.backgroundColor = '#ADD8E6';
+        var spriteBack = this.game.add.sprite(0, 0, 'background');
+        spriteBack.alpha = 0.4;
 
         // Skapar tilemappen
-        this.map = this.game.add.tilemap('test');
-        this.map.addTilesetImage('spritesheet', 'tiles');
+        this.map = this.game.add.tilemap('test2');
+        this.map.addTilesetImage('spritesheetV2', 'tiles2');
         this.layerGround = this.map.createLayer('ground');
         this.layerBackground = this.map.createLayer('background');
+        this.layerDoor = this.map.createLayer('door');
+
+        this.layerGround.alpha = 0.4;
+        this.layerBackground.alpha = 0.4;
+        this.layerDoor.alpha = 0.4;
         
         this.game.add.sprite(200, 100, 'menu');
         
-        this.button = game.add.button(325, 300, 'button', this.actionOnClick);
-
+        this.button = game.add.button(325, 220, 'newGame', this.actionOnClick, this);
+        this.button = game.add.button(325, 270, 'levels', this.showLevels, this);
         
         this.layerBackground.resizeWorld();
         this.layerGround.resizeWorld();
-        this.layerBackground.debug = true;
-        this.layerGround.debug = true;
-
-
-
+        //this.layerBackground.debug = true;
+        //this.layerGround.debug = true;
     },
 
     actionOnClick: function() {
-        console.log('jag är en knapp');
-        this.game.state.start('level1');
-    //background.visible =! background.visible;
+        this.game.currentLevel = 1;
+        this.game.state.start('game');
     },
-
-    update: function() {
-
-    }
+    showLevels: function() {
+        this.game.state.start('levels');
+    },
 
 }
