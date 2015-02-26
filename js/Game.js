@@ -13,7 +13,6 @@ Game = function(game) {
     this.layerGround = null;
     this.layerBackground = null;
     this.layerDoor = null;
-    this.imageFinish = null;
     this.sumo = null;
     this.sumoWeight = null;
     this.enemy = null;
@@ -36,7 +35,6 @@ Game = function(game) {
     this.talkBubble = null;
     this.bird = null;
     this.birdNoFood = null;
-    this.timeElapsed = null;
     this.gameTimeResults = 0;
     this.matchWeight = 0;
     // SOUND
@@ -57,6 +55,8 @@ Game = function(game) {
     this.timesUpSumo = null;
     this.noMoreFood = 0;
     this.noMoreFoodBool = false;
+    // Cast
+    this.explode = 0;
 };
 
 Game.prototype = {      
@@ -66,18 +66,11 @@ Game.prototype = {
         //
         //game.stage.backgroundColor = '#ADD8E6';
         this.backGroundSprite = this.game.add.sprite(0, 0, 'background');
-        this.imageFinish = game.add.sprite(game.world.centerX, game.world.centerY, 'finish');
-        this.imageFinish.anchor.setTo(0.5, 0.5);
-        this.imageFinish.alpha = 0;
 
         // Skapar tilemappen
         this.map = this.game.add.tilemap('test2');
         this.map.addTilesetImage('spritesheetV2', 'tiles2');
-/*
-        this.map = this.game.add.tilemap('test2');
-        this.map.addTilesetImage('spritesheetV2', 'tiles2');*/
 
-        //this.layerGround.setCollisionByExclusion([]);
 
         // LAYERS from Tiled
         this.layerBackground = this.map.createLayer('background');
@@ -95,7 +88,6 @@ Game.prototype = {
         this.map.setCollision(785, true, 'ground');
         this.map.setCollision(815, true, 'ground');
 
-        //this.layerDoor = this.map.createLayer('door');
 
         this.layerGround.resizeWorld();
         this.layerBackground.resizeWorld();
@@ -122,7 +114,7 @@ Game.prototype = {
         this.sumo.body.gravity.y = 800;
         this.sumo.enableBody = true;
         this.sumoWeight = 160;
-        this.talkBubble = this.game.add.sprite(this.sumo.x - 18, this.sumo.y - 25, 'hungryBubble');
+        this.talkBubble = this.game.add.sprite(this.sumo.x - 18, this.sumo.y - 40, 'hungryBubble');
         this.talkBubble.alpha = 0;
 
         // div map objects
@@ -143,10 +135,8 @@ Game.prototype = {
         //
         // HUD
         //
-        this.scoreText = this.game.add.text(16, 16, 'Weight Gain: 0kg', { fontSize: '32px', fill: '#fc5343' });
-        this.gameTimeText = this.game.add.text(300, 16, 'Time until match: 0', { fontSize: '32px', fill: '#fc5343' });
-        this.timeElapsed = this.game.add.text(this.imageFinish.x - 20, this.imageFinish.y + 30, '', { fontSize: '32px', fill: '#fc5343' });
-        this.timeElapsed.alpha = 0;
+        this.scoreText = this.game.add.text(16, 16, 'Current Weight: ' + this.sumoWeight + 'kg', { fontSize: '32px', fill: '#fc5343' });
+        this.gameTimeText = this.game.add.text(350, 16, 'Countdown: 0', { fontSize: '32px', fill: '#fc5343' });
 
         this.restartButton = game.add.button(750, 10, 'restart', this.restartLevel, this);
 
@@ -237,11 +227,6 @@ Game.prototype = {
                             .start();
                             this.food.body.bounce.y = 0.3;
                             this.food.body.gravity.y = 800;
-                            /*this.food.body.velocity.y = -300 +  (i * 30);
-                            if(i % 2)
-                                this.food.body.acceleration.x = 20 + (i * 30);
-                            else
-                                this.food.body.acceleration.x = -20 + (i * 30);*/
                         }                      
                     break;
 
@@ -293,7 +278,7 @@ Game.prototype = {
                         this.game.currentLevel = 4;
                         game.time.reset();
                         // Time before level done
-                        this.timeUpTimer = 8;
+                        this.timeUpTimer = 10;
 
                         // create FOOD
                         this.food = this.foodItems.create(166, this.game.world.height - 216, 'cake');
@@ -335,7 +320,7 @@ Game.prototype = {
                         this.game.currentLevel = 5;
                         game.time.reset();
                         // Time before level done
-                        this.timeUpTimer = 10;
+                        this.timeUpTimer = 12;
 
                         // create FOOD
                         this.food = this.foodItems.create(60, this.game.world.height - 440, 'meatStick');
@@ -359,7 +344,7 @@ Game.prototype = {
                 case 6: 
                         // SET LEVEL GOALS
                         this.matchWeight = 180;
-                        this.game.currentLevel = 5;
+                        this.game.currentLevel = 6;
                         game.time.reset();
                         // Time before level done
                         this.timeUpTimer = 15;
@@ -391,13 +376,27 @@ Game.prototype = {
                 case 7:
 
                         // SET LEVEL GOALS
-                        this.matchWeight = 210;
-                        this.game.currentLevel = 6;
+                        this.matchWeight = 190;
+                        this.game.currentLevel = 7;
                         game.time.reset();
                         // Time before level done
-                        this.timeUpTimer = 13;
+                        this.timeUpTimer = 12;
+
+
 
                         // Create FOOD
+                        this.food = this.foodItems.create(166, this.game.world.height - 216, 'cake');
+                        this.noMoreFood++;
+                        this.food.scale.x = 0.5;
+                        this.food.scale.y = 0.5;
+                        this.food = this.foodItems.create(590, this.game.world.height - 168, 'ribs');
+                        this.noMoreFood++;
+                        this.food.scale.x = 0.6;
+                        this.food.scale.y = 0.6;
+                        this.food = this.foodItems.create(10, this.game.world.height - 440, 'meatStick');
+                        this.noMoreFood++;
+                        this.food.scale.x = 0.6;
+                        this.food.scale.y = 0.6;
                         /*var maxFood = 4;
                         for(var i = 0; i < maxFood; i++) {
                             this.noMoreFood++;
@@ -410,7 +409,7 @@ Game.prototype = {
                         //
                         // Enemy
                         //
-                        this.enemy = this.game.add.sprite(300, this.game.world.height - 60, 'baddie');
+                        /*this.enemy = this.game.add.sprite(300, this.game.world.height - 60, 'baddie');
                         this.game.physics.enable(this.enemy, Phaser.Physics.ARCADE);
                         this.enemy.enableBody = false;
                         this.enemy.body.gravity.y = 800;
@@ -418,7 +417,7 @@ Game.prototype = {
                         var tween = this.game.add.tween(this.enemy)
                         .to({x:400}, 1000, Phaser.Easing.Linear.None, false, 0, Number.MAX_VALUE,true)
                         .loop()
-                        .start();
+                        .start();*/
 
                         //
                         // Bird
@@ -434,8 +433,57 @@ Game.prototype = {
                     break;
                 case 8: 
                         // SET LEVEL GOALS
+                        this.matchWeight = 220;
+                        this.game.currentLevel = 8;
+                        game.time.reset();
+                        // Time before level done
+                        this.timeUpTimer = 14;
+
+                        // create FOOD
+                        this.food = this.foodItems.create(10, this.game.world.height - 440, 'meatStick');
+                        this.noMoreFood++;
+                        this.food.scale.x = 0.6;
+                        this.food.scale.y = 0.6;
+                        this.food = this.foodItems.create(620, this.game.world.height - 168, 'ribs');
+                        this.noMoreFood++;
+                        this.food.scale.x = 0.6;
+                        this.food.scale.y = 0.6;
+                        this.food = this.foodItems.create(166, this.game.world.height - 216, 'cake');
+                        this.noMoreFood++;
+                        this.food.scale.x = 0.5;
+                        this.food.scale.y = 0.5;
+                        this.food = this.foodItems.create(580, this.game.world.height - 164, 'chicken');
+                        this.noMoreFood++;
+                        this.food.scale.x = 0.6;
+                        this.food.scale.y = 0.6;
+                        this.food = this.foodItems.create(40, this.game.world.height - 440, 'meatStick');
+                        this.noMoreFood++;
+                        this.food.scale.x = 0.6;
+                        this.food.scale.y = 0.6;
+                        this.food = this.foodItems.create(230, this.game.world.height - 126, 'meatStick');
+                        this.noMoreFood++;
+                        this.food.scale.x = 0.6;
+                        this.food.scale.y = 0.6;
+
+
+                        //
+                        // Enemy
+                        //
+                        /*this.enemy = this.game.add.sprite(30, this.game.world.height - 440, 'baddie');
+                        this.game.physics.enable(this.enemy, Phaser.Physics.ARCADE);
+                        this.enemy.enableBody = false;
+                        this.enemy.body.gravity.y = 800;
+                        // move enemy
+                        var tween = this.game.add.tween(this.enemy)
+                        .to({x:80}, 1000, Phaser.Easing.Linear.None, false, 0, Number.MAX_VALUE,true)
+                        .loop()
+                        .start();*/
+                        
+                        break;
+                     case 9: 
+                        // SET LEVEL GOALS
                         this.matchWeight = 180;
-                        this.game.currentLevel = 5;
+                        this.game.currentLevel = 9;
                         game.time.reset();
                         // Time before level done
                         this.timeUpTimer = 15;
@@ -466,9 +514,7 @@ Game.prototype = {
                         break;
                         
                 default: 
-                    break;
-
-                 
+                    break;         
             }
     },
 
@@ -488,6 +534,9 @@ Game.prototype = {
     feedTheSumo: function() {
         if(this.hasFoodItem)
         {
+            // - FUL LEK
+            this.explode+=this.numberOfFood
+            //
             this.eatingSumo.play('');
             // keeps track if there is any more food on the map
             this.noMoreFood -= this.numberOfFood;
@@ -499,27 +548,75 @@ Game.prototype = {
             // Add the sumos weight and remove food carried
             this.sumoWeight += 10 * this.numberOfFood;
             this.score += 10 * this.numberOfFood;
+            // TWEEN
+            this.sumoScale += 0.2;
+            this.sumoScale += 0.1 * this.numberOfFood;
+
             this.numberOfFood = 0;
-            this.scoreText.text = 'Weight Gain: ' + this.score + 'kg';
+            this.scoreText.text = 'Current Weight: ' + this.sumoWeight + 'kg';
             this.hasFoodItem = false;
             console.log('feed sumo, hasFoodItem = ' + this.hasFoodItem);
 
-            //this.game.currentLevel++;
-            //console.log(this.game.currentLevel);
-
-            // TWEEN
-            this.sumoScale += 0.2;
-
             // Ta bort prat bubblan om matad
-            if(this.game.currentLevel ==     1)
+            if(this.game.currentLevel == 1)
                 this.talkBubble.alpha = 0;
 
-            // Gör sumon större
+            // En variant av sumo större
+            /*var tween = this.game.add.tween(this.sumo.scale)
+            .to({x:this.sumoScale - 0.08 * this.numberOfFood,y:this.sumoScale - 0.08 * this.numberOfFood}, 500, Phaser.Easing.Back.Out)
+            .to({x:this.sumoScale - 0.04 * this.numberOfFood,y:this.sumoScale - 0.04 * this.numberOfFood}, 500, Phaser.Easing.Back.Out)
+            .to({x:this.sumoScale,y:this.sumoScale}, 500, Phaser.Easing.Back.Out)
+            .start();*/
+
+            //
+            // Skämt för casten, SumoExplode
+            //
+           /* if(this.explode >= 3) {
+                var tween = this.game.add.tween(this.sumo.scale)
+                .to({x:this.sumoScale - 0.2,y:this.sumoScale - 0.2}, 500, Phaser.Easing.Back.Out)
+                .to({x:this.sumoScale - 0.1,y:this.sumoScale - 0.1}, 500, Phaser.Easing.Back.Out)
+                .to({x:this.sumoScale,y:this.sumoScale}, 500, Phaser.Easing.Back.Out)
+                .start();
+
+                this.game.time.events.add(Phaser.Timer.SECOND * 0.8, function() {
+                    this.sumo.alpha = 0;
+                    var explo = game.add.sprite(this.sumo.x, this.sumo.y, 'expl1');
+                    var tween = this.game.add.tween(explo)
+                    .to({alpha:0}, 1000, Phaser.Easing.Linear.None)
+                    .start();
+                    }, this);
+
+                this.game.time.events.add(Phaser.Timer.SECOND * 0.9, function() {
+                    for(var i = 0; i < 8; i++) {
+                        this.noMoreFood++;
+                        this.food = this.foodItems.create(this.sumo.x, this.sumo.y, 'meatStick');
+                        this.food.scale.x = 0.6;
+                        this.food.scale.y = 0.6;
+                        this.food.body.gravity.y = 500;
+                        this.food.body.velocity.y = -500 +  (i *80);
+                        //this.food.body.velocity.x = -20;
+                        if(i % 2)
+                            this.food.body.velocity.x = -20 + (i * -20);
+                        else
+                            this.food.body.velocity.x = 20 + (i * 20);
+                    }
+                }, this);
+                this.game.time.events.add(Phaser.Timer.SECOND * 1, function() { this.sumo.kill();}, this);
+                
+             
+            } else {*/
+
+            // "Animationerna" för sumon växer
             var tween = this.game.add.tween(this.sumo.scale)
             .to({x:this.sumoScale - 0.2,y:this.sumoScale - 0.2}, 500, Phaser.Easing.Back.Out)
             .to({x:this.sumoScale - 0.1,y:this.sumoScale - 0.1}, 500, Phaser.Easing.Back.Out)
             .to({x:this.sumoScale,y:this.sumoScale}, 500, Phaser.Easing.Back.Out)
             .start();
+
+            this.numberOfFood = 0;
+            this.scoreText.text = 'Current Weight: ' + this.sumoWeight + 'kg';
+            this.hasFoodItem = false;
+            console.log('feed sumo, hasFoodItem = ' + this.hasFoodItem);
 
             // Sumo blinkar
             var tween = this.game.add.tween(this.sumo)
@@ -534,15 +631,7 @@ Game.prototype = {
             .to({alpha:0.5}, 125, Phaser.Easing.Back.Out)
             .to({alpha:1}, 125, Phaser.Easing.Back.Out)
             .start();
-
-            // FÖR ATT DEN INTE SKA VÄXA MER ÄN DET GAMET MAN SPELAR
-            this.sumoScale = 0.6;
-
-            // End screen
-            //this.game.time.events.add(Phaser.Timer.SECOND * 5, function() {this.game.state.start('game');}, this);
-            // TODO
-            //starvingSumo();
-            //console.log(startTime);
+            //}
         }
     },
 
@@ -647,7 +736,7 @@ Game.prototype = {
         .to({x:400}, 1000, Phaser.Easing.Linear.None)
         .start();
 
-        // WIN OR LOOOST
+        // WIN OR LOOOSe
         if(this.sumoWeight >= this.matchWeight) {
             // WON
             // TWEEN ENEMY SUMO
@@ -673,19 +762,18 @@ Game.prototype = {
 
             }, this);
 
-        this.game.time.events.add(Phaser.Timer.SECOND * 3, function() {
-            this.timesUpSumo.alpha = 0;
-            this.timesUpEnemySumo.alpha = 0;
-            
-
-            this.timesUpRestartButton = game.add.button(253, 350, 'timesUpNextRestart', 
-                this.restartLevel, this);
-            this.timesUpNextLevelButton = game.add.button(393, 350, 'timesUpNextLevelButton', function() {
-                this.game.currentLevel++;
-                this.game.state.start('game');
-                }, this);
-
+            this.game.time.events.add(Phaser.Timer.SECOND * 3, function() {
+                this.timesUpSumo.alpha = 0;
+                this.timesUpEnemySumo.alpha = 0;
+                
+                this.timesUpRestartButton = game.add.button(253, 350, 'timesUpNextRestart', 
+                    this.restartLevel, this);
+                this.timesUpNextLevelButton = game.add.button(393, 350, 'timesUpNextLevelButton', function() {
+                    this.game.currentLevel++;
+                    this.game.state.start('game');
+                    }, this);
             }, this);
+
         } else {
             // LOST
             console.log('LOOOST')
@@ -723,25 +811,17 @@ Game.prototype = {
                     }, this);
                 }, this);
         }
-        /*this.game.physics.arcade.collide(this.timesUpSumo, this.timesUpEnemySumo,function() {
-            this.timesUpEnemySumo.velocity.x += 400 
 
-            } , null, this);*/
-        // GAMMAL
-        // TIME
-        //Math.floor(this.gameTime/100)/10
-        //this.timeElapsed.text = "Time: " + (Math.floor(this.gameTime/100)/10).toFixed(1);
-
-        //this.timeElapsed.alpha = 1;
-        //this.game.add.tween(this.imageFinish).to( { alpha: 1 }, 2000, Phaser.Easing.Linear.None).start();
+        
         
     },
 
     update: function() {
 
-
+        var bajs = false;
         // TIMES UP
-        if(this.timeUpTimer == Math.floor(this.gameTime/100)/10 || this.noMoreFoodBool) {
+        if(this.timeUpTimer == Math.floor(this.gameTime/100)/10 || this.noMoreFoodBool && bajs != true) {
+            bajs = true;
             // Dont eneter the loop again in the same game
             this.noMoreFoodBool = false;
             this.game.time.reset();
@@ -751,6 +831,7 @@ Game.prototype = {
             this.scoreText.alpha = 0;
             this.gameTimeText.alpha = 0;
             this.sprite.alpha = 0;
+            this.sumoScale = 0.6;
         }
 
         // LEVEL
@@ -775,7 +856,6 @@ Game.prototype = {
             this.birdSound.play('');
             particle.kill();
             this.createFoodItem(bird.x, bird.y, true);
-            this.timeElapsed.text = "Time: " + (Math.floor(this.gameTime/100)/10).toFixed(1);
             var blabla = game.add.sprite(bird.x, bird.y, 'explosion');
             blabla.scale.x = 2;
             blabla.scale.y = 2;
@@ -816,8 +896,7 @@ Game.prototype = {
 
         // HUD
         this.gameTime = Math.round((this.game.time.now - this.game.time._started));
-        if(this.timeElapsed.alpha != 1 /*&& (this.timeUpTimer == Math.floor(this.gameTime/100)/10)*/)
-            var showTime = (this.timeUpTimer - (Math.floor(this.gameTime/100)/10).toFixed(1));
-            this.gameTimeText.text = 'Time until match: ' + showTime.toFixed(1);
+        var showTime = (this.timeUpTimer - (Math.floor(this.gameTime/100)/10).toFixed(1));
+        this.gameTimeText.text = 'Countdown: ' + showTime.toFixed(1);
     }
 };

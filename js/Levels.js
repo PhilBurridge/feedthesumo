@@ -36,22 +36,20 @@ Levels.prototype = {
         this.button = game.add.button(buttonPosX += 30, 230, 'lvl2', this.startLvl2, this);
         this.button = game.add.button(buttonPosX += 30, 230, 'lvl3', this.startLvl3, this);
         this.button = game.add.button(buttonPosX += 30, 230, 'lvl4', this.startLvl4, this);
-        this.button = game.add.button(buttonPosX += 30, 230, 'lvl4', this.startLvl5, this);
-        this.button = game.add.button(buttonPosX += 30, 230, 'lvl4', this.startLvl6, this);
+        this.button = game.add.button(buttonPosX += 30, 230, 'lvl5', this.startLvl5, this);
+        this.button = game.add.button(buttonPosX += 30, 230, 'lvl6', this.startLvl6, this);
         buttonPosX = 300;
-        this.button = game.add.button(buttonPosX, 280, 'lvl1', this.startLvl7, this);
-        this.button = game.add.button(buttonPosX += 30, 280, 'lvl2', this.startLvl8, this);
-        this.button = game.add.button(buttonPosX += 30, 280, 'lvl3', this.startLvl8, this);
-        this.button = game.add.button(buttonPosX += 30, 280, 'lvl4', this.startLvl4, this);
-        this.button = game.add.button(buttonPosX += 30, 280, 'lvl4', this.startLvl4, this);
-        this.button = game.add.button(buttonPosX += 30, 280, 'lvl4', this.startLvl4, this);
+        this.button = game.add.button(buttonPosX, 280, 'lvl7', this.startLvl7, this);
+        this.button = game.add.button(buttonPosX += 30, 280, 'lvl8', this.startLvl8, this);
+        this.button = game.add.button(buttonPosX += 30, 280, 'lvl9', this.startLvl9, this);
+        //this.button = game.add.button(buttonPosX += 30, 280, 'lvl4', this.startLvl4, this);
+        //this.button = game.add.button(buttonPosX += 30, 280, 'lvl4', this.startLvl4, this);
+        //this.button = game.add.button(buttonPosX += 30, 280, 'lvl4', this.startLvl4, this);
         this.button = game.add.button(320, 340, 'mainMenuButton', this.toMainMenu, this);
 
         
         this.layerBackground.resizeWorld();
         this.layerGround.resizeWorld();
-        //this.layerBackground.debug = true;
-        //this.layerGround.debug = true;
     },
 
     startLvl1: function() {
@@ -91,6 +89,11 @@ Levels.prototype = {
 
     startLvl8: function() {
         this.game.currentLevel = 8;
+        this.game.state.start('game');
+    },
+
+    startLvl9: function() {
+        this.game.currentLevel = 9;
         this.game.state.start('game');
     },
 

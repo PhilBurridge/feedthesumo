@@ -17,7 +17,7 @@ MainMenu.prototype = {
         var spriteBack = this.game.add.sprite(0, 0, 'background');
         spriteBack.alpha = 0.4;
 
-        // Skapar tilemappen
+        // Skapar tilemappen (bakgrunden)
         this.map = this.game.add.tilemap('test2');
         this.map.addTilesetImage('spritesheetV2', 'tiles2');
         this.layerGround = this.map.createLayer('ground');
@@ -35,8 +35,6 @@ MainMenu.prototype = {
         
         this.layerBackground.resizeWorld();
         this.layerGround.resizeWorld();
-        //this.layerBackground.debug = true;
-        //this.layerGround.debug = true;
     },
 
     actionOnClick: function() {

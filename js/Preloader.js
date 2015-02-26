@@ -13,6 +13,11 @@ Preloader.prototype = {
         this.game.load.image('lvl2', './assets/menu/levelTwoButtonV2.png');
         this.game.load.image('lvl3', './assets/menu/levelThreeButtonV2.png');
         this.game.load.image('lvl4', './assets/menu/levelFourButtonV2.png');
+        this.game.load.image('lvl5', './assets/menu/levelFiveButton.png');
+        this.game.load.image('lvl6', './assets/menu/levelSixButton.png');
+        this.game.load.image('lvl7', './assets/menu/levelSevenButton.png');
+        this.game.load.image('lvl8', './assets/menu/levelEightButton.png');
+        this.game.load.image('lvl9', './assets/menu/levelNineButton.png');
         this.game.load.image('restart', './assets/menu/knappRestart.png');
         this.game.load.image('mainMenuButton', './assets/menu/mainMenuButtonV2.png');
         // TIMES UP MENU
@@ -24,27 +29,29 @@ Preloader.prototype = {
         this.game.load.image('timesUpYouWon', './assets/menu/youWonText.png');
         this.game.load.image('timesUpMoreFood', './assets/menu/timesUpMoreFood.png');
         this.game.load.image('enemySumo', './assets/sumo/enemySumo.png');
-        // Level1
+        this.game.load.image('expl1', './assets/sumo/sumoExpl1.png');
+        this.game.load.image('expl2', './assets/sumo/sumoExpl2.png');
+        this.game.load.image('expl3', './assets/sumo/sumoExpl3.png');
         //
         // MAP
         //
         this.game.load.tilemap('test2', './assets/map/level1v04.json', null, Phaser.Tilemap.TILED_JSON);
         this.game.load.image('tiles2', './assets/map/spritesheetV2.png');
-        this.game.load.image('finish', 'assets/menu/text.png');
-        this.game.load.image('background', 'assets/map/backgroundTest.png');
+        this.game.load.image('background', 'assets/map/backgroundV4.png');
 
         //
         //  DIV
         //
         this.game.load.image('sumoGreen', 'assets/sumo/lonleySumo.png');
         this.game.load.image('meatStick', 'assets/food/meat_bone.png');
+        this.game.load.image('chicken', 'assets/food/chicken.png');
         this.game.load.image('cake', 'assets/food/cake.png');
         this.game.load.image('bird', 'assets/div/bird1.png');
         this.game.load.image('birdFood', 'assets/div/birdFood.png');
         this.game.load.image('ribs', 'assets/food/ribs.png');
         this.game.load.image('shootFire', 'assets/player/shootFire.png');
         this.game.load.image('explosion', 'assets/div/explosion.png');
-        this.game.load.image('hungryBubble', 'assets/sumo/feedMeBubble4Items.png');
+        this.game.load.image('hungryBubble', 'assets/sumo/feedMeBubbleFirst.png');
         this.game.load.image('foodCart', 'assets/div/foodCart.png');
         this.game.load.spritesheet('baddie', 'assets/div/baddie.png', 32, 32);
 

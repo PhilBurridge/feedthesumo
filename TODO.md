@@ -32,6 +32,8 @@ Tanken bakom alla lvls
 8. Lära sig grilla/tackla fåglar?
 9. Lära sig att man behöver ta undvika ett item för att hinna banan
 
+
+
 ## GAMLE TODO; VISSA KANSKE AKTUELLA
 
 1. Menu mellan lvls med tid, nextlvl, restart lvl.
